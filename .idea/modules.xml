@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend_skeleton.iml" filepath="$PROJECT_DIR$/.idea/modules/backend_skeleton.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend_skeleton-batch/backend_skeleton-batch.iml" filepath="$PROJECT_DIR$/.idea/modules/backend_skeleton-batch/backend_skeleton-batch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend_skeleton-domain/backend_skeleton-domain.iml" filepath="$PROJECT_DIR$/.idea/modules/backend_skeleton-domain/backend_skeleton-domain.iml" group="backend_skeleton-domain" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend_skeleton-domain/backend_skeleton-domain_main.iml" filepath="$PROJECT_DIR$/.idea/modules/backend_skeleton-domain/backend_skeleton-domain_main.iml" group="backend_skeleton-domain" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend_skeleton-domain/backend_skeleton-domain_test.iml" filepath="$PROJECT_DIR$/.idea/modules/backend_skeleton-domain/backend_skeleton-domain_test.iml" group="backend_skeleton-domain" />
+    </modules>
+  </component>
+</project>
