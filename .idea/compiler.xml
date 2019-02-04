@@ -23,10 +23,6 @@
       <module name="backend_skeleton-batch_test" target="1.8" />
       <module name="backend_skeleton-domain_main" target="1.8" />
       <module name="backend_skeleton-domain_test" target="1.8" />
-      <module name="backend_skeleton-interfaces_main" target="1.8" />
-      <module name="backend_skeleton-interfaces_test" target="1.8" />
-      <module name="backend_skeleton_main" target="1.5" />
-      <module name="backend_skeleton_test" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -40,4 +40,14 @@ public class User implements Creatable, Modifiable, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modifiedAt", nullable = false)
     private Date modifiedAt;
+
+    @Override
+    public void setCreatedAt(Date date) {
+        this.createdAt = date;
+    }
+
+    @Override
+    public void setModifiedAt(Date date) {
+        this.modifiedAt = date;
+    }
 }
