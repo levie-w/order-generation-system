@@ -1,29 +1,31 @@
-.gradle
-/build/
-!gradle/wrapper/gradle-wrapper.jar
-.DS_Store
-### STS ###
-.apt_generated
-.classpath
-.factorypath
 .project
-.settings
+*.prefs
+.classpath
 .springBeans
-.sts4-cache
-### IntelliJ IDEA ###
-.idea
-*.iws
+.settings
+target/
+tmp
+.idea/
 *.iml
 *.ipr
-/out/
-/target/
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-# Generated code
-*/generated
-*/generated_tests
-*/src/main/generated
+*.iws
+project/
+.gradle/
+out/
+.metadata
+classes/
+atlassian-ide-plugin.xml
+.sonar/
+sonar-project.*
+*~
+rebel.xml
+buildSrc/
+db-migration/
+contiperf-report/
+bin/
+build/
+*/src/generated/
+export.sql
+upstreams_live.conf
+.scannerwork/
+.DS_Store
