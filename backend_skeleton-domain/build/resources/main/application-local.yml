@@ -4,26 +4,26 @@ spring:
   profiles: local
 
 ########################################################
-###数据库连接信息
+### Data Source
 ########################################################
-#连接地址
   datasource:
     url: jdbc:mysql://localhost:3306/test
-#数据库账户
     username: root
-#数据库密码
-    password: 
-#数据库驱动
+    password:
     driver-class-name: com.mysql.jdbc.Driver
 
 ########################################################
-### Java Persistence Api JPA相关配置
+### Java Persistence Api JPA
 ########################################################
-#指定数据库类型
   jpa:
     database: mysql
-#控制台打印sql
     show-sql: true
+
+    # hibernate
+    hibernate:
+      naming:
+        # hql命名策略
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 # log
 logging:

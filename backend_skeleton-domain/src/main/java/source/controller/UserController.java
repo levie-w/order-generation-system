@@ -30,8 +30,8 @@ public class UserController {
      * @param userId 用户id
      * @return User对象 用户信息，有可能是null
      */
-    @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Long userId){
+    @GetMapping("/users/{userId}")
+    public User getUserById(@PathVariable Long userId) {
         return userService.findUserById(userId);
     }
 }
