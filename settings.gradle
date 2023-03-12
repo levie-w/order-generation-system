@@ -1,4 +1,2 @@
-rootProject.name = 'backend_skeleton'
-include 'backend_skeleton-batch'
-include 'backend_skeleton-domain'
-
+rootProject.name = 'order-generation-system'
+include 'app'

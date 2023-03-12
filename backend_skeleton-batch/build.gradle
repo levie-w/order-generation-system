@@ -1,6 +1,0 @@
-dependencies {
-    compile project(':backend_skeleton-domain')
-}
-
-bootJar.enabled = false
-jar.enabled = true

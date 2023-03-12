@@ -29,3 +29,5 @@ export.sql
 upstreams_live.conf
 .scannerwork/
 .DS_Store
+
+node_modules/

@@ -1,0 +1,105 @@
+.login-page{
+    display: flex;
+    height: 100vh;
+    background: #4b4b4b;
+}
+
+.login-wrapper{
+    width: 800px;
+    height: 695px;
+    transform: scale(0.85);
+    margin: 6% auto auto;
+    ul, li{padding: 0; margin: 0; list-style: none;}
+
+    li{
+        width: 560px;
+        margin: auto auto 12px;
+        input, select{
+            width: 100%;
+            height: 86px;
+            border-radius: 6px;
+            border: solid 2px #6261ff;
+            font-size: 34px;
+            color: #999;
+            padding: 0 30px;
+            appearance: none;
+        }
+    }
+
+    button{
+        width: 100%;
+        height: 104px;
+        border-radius: 6px;
+        box-shadow: inset 0 -3px 0 0 #5857b1;
+        background-color: #6261ff;
+        color: white;
+        border: 0;
+        font-size: 40px;
+        cursor: pointer;
+    }
+
+    select{
+        color: #6261ff;
+        background-image:
+                linear-gradient(45deg, transparent 50%, gray 50%),
+                linear-gradient(135deg, gray 50%, transparent 50%),
+                linear-gradient(to right, #ccc, #ccc);
+        background-position:
+                calc(100% - 45px) calc(1em + 2px),
+                calc(100% - 35px) calc(1em + 2px),
+                calc(100% - 2.5em) 0.5em;
+        background-size:
+                10px 10px,
+                10px 10px,
+                1px 1.5em;
+        background-repeat: no-repeat;
+    }
+
+    select:focus{
+        background-image:
+                linear-gradient(45deg, rgba(98, 97, 255, 1) 50%, transparent 50%),
+                linear-gradient(135deg, transparent 50%, rgba(98, 97, 255, 1) 50%),
+                linear-gradient(to right, #ccc, #ccc);
+        background-position:
+                calc(100% - 35px) 1em,
+                calc(100% - 45px) 1em,
+                calc(100% - 2.5em) 0.5em;
+        background-size:
+                10px 10px,
+                10px 10px,
+                1px 1.5em;
+        background-repeat: no-repeat;
+        border-color: rgba(98, 97, 255, 1);
+        outline: 0;
+    }
+
+    select:-moz-focusring{
+        color: transparent;
+        text-shadow: 0 0 0 #000;
+    }
+
+    dt{
+        margin-bottom: 20px;
+        text-align: left;
+        height: 66px;
+        line-height: 66px;
+        text-indent: 75px;
+        font-size: 50px;
+        font-weight: 300;
+        color: white;
+        background: url("./img/logo.png") no-repeat left center;
+    }
+}
+
+.login-box{
+    background-color: #ffffff;
+    border-top: 10px solid #6261ff;
+    height: 510px;
+}
+
+.login-tips{
+    width: 560px;
+    height: 98px;
+    padding-top: 20px;
+    margin: auto;
+}
