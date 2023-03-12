@@ -2,7 +2,9 @@ package backend.controller;
 
 import backend.entity.User;
 import backend.entity.dto.AuthenticationResult;
+import backend.entity.dto.UserRequestDto;
 import backend.entity.dto.UserResponseDto;
+import backend.entity.dto.Validity;
 import backend.service.UserService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,9 @@ public class UserController {
             userResponseDto.setCode(result.getCode());
             if (result.getCode() == 200) {
                 User user = result.getUser();
+                userResponseDto.setUserId(user.getUserId());
                 userResponseDto.setUsername(user.getUsername());
-                userResponseDto.setPermissionLevel(user.getPermissionLevel());
+                userResponseDto.setLevel(user.getLevel());
                 userResponseDto.setVersion(user.getVersion());
             } else {
                 userResponseDto.setMessage(result.getReport());
@@ -48,13 +51,26 @@ public class UserController {
 
     @PostMapping("/create")
     @ResponseBody
-    public UserResponseDto createUser(@RequestBody backend.entity.User user) {
+    public UserResponseDto createUser(@RequestBody UserRequestDto userRequestDto) {
         UserResponseDto userResponseDto = new UserResponseDto();
 
+        Validity validity = userService.validateUser(userRequestDto.getOperatingUserId(), userRequestDto.getOperatingVersion());
+        if (!validity.isPassed()) {
+            userResponseDto.setCode(501);
+            return userResponseDto;
+        }
+
         try {
+            User user = new User();
+            user.setUsername(userRequestDto.getUsername());
+            user.setPassword(userRequestDto.getPassword());
+            user.setLevel(userRequestDto.getLevel());
+
             user = userService.saveUser(user);
+
+            userResponseDto.setUserId(user.getUserId());
             userResponseDto.setUsername(user.getUsername());
-            userResponseDto.setPermissionLevel(user.getPermissionLevel());
+            userResponseDto.setLevel(user.getLevel());
             userResponseDto.setCode(200);
         } catch (Exception e) {
             userResponseDto.setCode(500);
@@ -66,13 +82,27 @@ public class UserController {
 
     @PostMapping("/edit")
     @ResponseBody
-    public UserResponseDto updateUser(@RequestBody backend.entity.User user) {
+    public UserResponseDto updateUser(@RequestBody UserRequestDto userRequestDto) {
         UserResponseDto userResponseDto = new UserResponseDto();
 
+        Validity validity = userService.validateUser(userRequestDto.getOperatingUserId(), userRequestDto.getOperatingVersion());
+        if (!validity.isPassed()) {
+            userResponseDto.setCode(501);
+            return userResponseDto;
+        }
+
         try {
+            User user = new User();
+            user.setUserId(userRequestDto.getUserId());
+            user.setUsername(userRequestDto.getUsername());
+            user.setPassword(userRequestDto.getPassword());
+            user.setLevel(userRequestDto.getLevel());
+
             user = userService.saveUser(user);
+
+            userResponseDto.setUserId(user.getUserId());
             userResponseDto.setUsername(user.getUsername());
-            userResponseDto.setPermissionLevel(user.getPermissionLevel());
+            userResponseDto.setLevel(user.getLevel());
             userResponseDto.setCode(200);
         } catch (Exception e) {
             userResponseDto.setCode(500);
@@ -84,8 +114,15 @@ public class UserController {
 
     @GetMapping("/listAll")
     @ResponseBody
-    public UserResponseDto listAllUsers() {
+    public UserResponseDto listAllUsers(@RequestParam("userId") Long userId,
+                                        @RequestParam("version") Long version) {
         UserResponseDto userResponseDto = new UserResponseDto();
+
+        Validity validity = userService.validateUser(userId, version);
+        if (!validity.isPassed()) {
+            userResponseDto.setCode(501);
+            return userResponseDto;
+        }
 
         List<User> users = userService.getAllUsers();
         if (CollectionUtils.isEmpty(users)) {
@@ -101,10 +138,19 @@ public class UserController {
 
     @GetMapping("/delete")
     @ResponseBody
-    public UserResponseDto deleteUser(@RequestParam("userId") Long userId) {
+    public UserResponseDto deleteUser(@RequestParam("userId") Long userId,
+                                      @RequestParam("operatingUserId") Long operatingUserId,
+                                      @RequestParam("operatingVersion") Long operatingVersion) {
+        UserResponseDto userResponseDto = new UserResponseDto();
+
+        Validity validity = userService.validateUser(operatingUserId, operatingVersion);
+        if (!validity.isPassed()) {
+            userResponseDto.setCode(501);
+            return userResponseDto;
+        }
+
         userService.deleteUser(userId);
 
-        UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setCode(200);
 
         return userResponseDto;

@@ -6,12 +6,15 @@ import ETable from './../../components/ETable'
 import BaseForm from '../../BaseForm';
 import moment from 'moment'
 import ExportJsonExcel from "js-export-excel";
+import { connect } from 'react-redux'
+import UserStore from "../../redux/store/UserStore";
+
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 const TextArea = Input.TextArea
 const Option = Select.Option
 
-export default class Client extends React.Component {
+class Client extends React.Component {
 
   params = {
     page: 1,
@@ -45,6 +48,8 @@ export default class Client extends React.Component {
       let fileContent = file.fileList[0].originFileObj;
       formData.append('override', override);
       formData.append('file', fileContent);
+      formData.append('userId', this.props.userId);
+      formData.append('version', this.props.version);
       axios.ajax({
         url: '/client/batchCreate',
         data: {
@@ -52,22 +57,32 @@ export default class Client extends React.Component {
           method: 'post'
         }
       }).then((data) => {
-        if (data && data.result) {
-          let list = data.result.map((item, index) => {
-            item.key = index
-            return item
-          })
-          this.setState({
-            list,
-            selectedRowKeys: null,
-            selectedItem: null,
-            pagination: Utils.pagination(data, (current) => {
-              this.params.page = current
-              this.setState({
-                selectedRowKeys: null,
-                selectedItem: null
+        if (data.code === 200) {
+          if (data.result) {
+            let list = data.result.map((item, index) => {
+              item.key = index
+              return item
+            })
+            this.setState({
+              list,
+              selectedRowKeys: null,
+              selectedItem: null,
+              pagination: Utils.pagination(data, (current) => {
+                this.params.page = current
+                this.setState({
+                  selectedRowKeys: null,
+                  selectedItem: null
+                })
               })
             })
+          }
+        } else if (data.code === 501) {
+          this.props.dispatch(UserStore.action.remove())
+          window.location.href = process.env.REACT_APP_FRONTEND_URL
+        } else {
+          Modal.info({
+            title: '提示',
+            content: data.message
           })
         }
       })
@@ -85,26 +100,39 @@ export default class Client extends React.Component {
     axios.ajax({
       url: '/client/listAll',
       data: {
-        params: undefined,
+        params: {
+          userId: this.props.userId,
+          version: this.props.version
+        },
         method: 'get'
       }
     }).then((data) => {
-      if (data && data.result) {
-        let list = data.result.map((item, index) => {
-          item.key = index
-          return item
-        })
-        this.setState({
-          list,
-          selectedRowKeys: null,
-          selectedItem: null,
-          pagination: Utils.pagination(data, (current) => {
-            this.params.page = current
-            this.setState({
-              selectedRowKeys: null,
-              selectedItem: null
+      if (data.code === 200) {
+        if (data.result) {
+          let list = data.result.map((item, index) => {
+            item.key = index
+            return item
+          })
+          this.setState({
+            list,
+            selectedRowKeys: null,
+            selectedItem: null,
+            pagination: Utils.pagination(data, (current) => {
+              this.params.page = current
+              this.setState({
+                selectedRowKeys: null,
+                selectedItem: null
+              })
             })
           })
+        }
+      } else if (data.code === 501) {
+        this.props.dispatch(UserStore.action.remove())
+        window.location.href = process.env.REACT_APP_FRONTEND_URL
+      } else {
+        Modal.info({
+          title: '提示',
+          content: data.message
         })
       }
     })
@@ -156,7 +184,9 @@ export default class Client extends React.Component {
             url: '/client/delete',
             data: {
               params: {
-                clientId: item.clientId
+                clientId: item.clientId,
+                userId: _this.props.userId,
+                version: _this.props.version
               },
               method: 'get'
             }
@@ -166,6 +196,14 @@ export default class Client extends React.Component {
                 isVisible: false
               })
               _this.listAllClients()
+            } else if (res.code === 501) {
+              _this.props.dispatch(UserStore.action.remove())
+              window.location.href = process.env.REACT_APP_FRONTEND_URL
+            } else {
+              Modal.info({
+                title: '提示',
+                content: res.message
+              })
             }
           })
         }
@@ -191,7 +229,9 @@ export default class Client extends React.Component {
             clientId: clientId,
             clientCode: clientCode,
             clientName: clientName,
-            clientType: clientType
+            clientType: clientType,
+            userId: this.props.userId,
+            version: this.props.version
           },
           method: 'post'
         }
@@ -204,6 +244,14 @@ export default class Client extends React.Component {
             selectedItem: null
           })
           this.listAllClients()
+        } else if (res.code === 501) {
+          this.props.dispatch(UserStore.action.remove())
+          window.location.href = process.env.REACT_APP_FRONTEND_URL
+        } else {
+          Modal.info({
+            title: '提示',
+            content: res.message
+          })
         }
       })
     } else {
@@ -295,6 +343,15 @@ export default class Client extends React.Component {
     )
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    userId: state.userInfo.userId,
+    version: state.userInfo.version
+  }
+}
+export default connect(mapStateToProps)(Client)
+
 
 class ClientForm extends React.Component{
 

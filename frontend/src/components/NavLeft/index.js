@@ -24,7 +24,7 @@ class NavLeft extends React.Component{
 
   componentWillMount() {
     let menu = MenuConfig
-    if (this.props.permissionLevel !== 1) {
+    if (this.props.level !== 1) {
       menu = MenuConfig.filter(item => item.key !== '/user')
     }
 
@@ -77,7 +77,7 @@ class NavLeft extends React.Component{
 const mapStateToProps = state => {
   return {
     username: state.userInfo.username,
-    permissionLevel: state.userInfo.permissionLevel
+    level: state.userInfo.level
   }
 }
 export default connect(mapStateToProps)(NavLeft)

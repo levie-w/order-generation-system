@@ -32,8 +32,8 @@ public class User implements Versionable, Creatable, Modifiable, Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "permission_level", nullable = false)
-    private Integer permissionLevel;
+    @Column(name = "level", nullable = false)
+    private Integer level;
 
     @Column(name = "version", nullable = false)
     private Long version;

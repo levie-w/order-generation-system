@@ -1,6 +1,8 @@
 package backend.controller;
 
+import backend.entity.dto.Validity;
 import backend.entity.excel.ValidationResult;
+import backend.service.UserService;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -29,13 +31,24 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/generate")
     @ResponseBody
     public OrderResponseDto generateOrders(@RequestParam("startDate") String startDate,
                                            @RequestParam("endDate") String endDate,
                                            @RequestParam("file") MultipartFile orderConditionFile,
-                                           @RequestParam("clientTypes") List<String> clientTypes) {
+                                           @RequestParam("clientTypes") List<String> clientTypes,
+                                           @RequestParam("userId") Long userId,
+                                           @RequestParam("version") Long version) {
         OrderResponseDto orderResponseDto = new OrderResponseDto();
+
+        Validity validity = userService.validateUser(userId, version);
+        if (!validity.isPassed()) {
+            orderResponseDto.setCode(501);
+            return orderResponseDto;
+        }
 
         if (orderConditionFile == null
                 || StringUtils.isEmpty(orderConditionFile.getOriginalFilename())

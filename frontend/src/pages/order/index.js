@@ -6,8 +6,10 @@ import {Table} from 'antd'
 import BaseForm from '../../BaseForm';
 import ExportJsonExcel from "js-export-excel";
 import moment from "moment";
+import {connect} from "react-redux";
+import UserStore from "../../redux/store/UserStore";
 
-export default class Order extends React.Component {
+class Order extends React.Component {
 
   params = {
     page: 1
@@ -79,6 +81,8 @@ export default class Order extends React.Component {
       formData.append('endDate', endDate);
       formData.append('file', fileContent);
       formData.append('clientTypes', clientTypes);
+      formData.append('userId', this.props.userId);
+      formData.append('version', this.props.version);
       axios.ajax({
         url: '/order/generate',
         data: {
@@ -86,22 +90,32 @@ export default class Order extends React.Component {
           method: 'post'
         }
       }).then((data) => {
-        if (data && data.result) {
-          let list = data.result.map((item, index) => {
-            item.key = index
-            return item
-          })
-          this.setState({
-            list,
-            selectedRowKeys: null,
-            selectedItem: null,
-            pagination: Utils.pagination(data, (current) => {
-              this.params.page = current
-              this.setState({
-                selectedRowKeys: null,
-                selectedItem: null
+        if (data.code === 200) {
+          if (data.result) {
+            let list = data.result.map((item, index) => {
+              item.key = index
+              return item
+            })
+            this.setState({
+              list,
+              selectedRowKeys: null,
+              selectedItem: null,
+              pagination: Utils.pagination(data, (current) => {
+                this.params.page = current
+                this.setState({
+                  selectedRowKeys: null,
+                  selectedItem: null
+                })
               })
             })
+          }
+        } else if (data.code === 501) {
+          this.props.dispatch(UserStore.action.remove())
+          window.location.href = process.env.REACT_APP_FRONTEND_URL
+        } else {
+          Modal.info({
+            title: '提示',
+            content: data.message
           })
         }
       })
@@ -229,3 +243,11 @@ export default class Order extends React.Component {
     )
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    userId: state.userInfo.userId,
+    version: state.userInfo.version
+  }
+}
+export default connect(mapStateToProps)(Order)

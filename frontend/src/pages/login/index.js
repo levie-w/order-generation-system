@@ -8,9 +8,10 @@ import {Modal} from "antd";
 
 class Login extends React.Component{
   state = {
+    userId: undefined,
     username: undefined,
     password: undefined,
-    permissionLevel: undefined,
+    level: undefined,
     version: undefined
   }
 
@@ -36,12 +37,14 @@ class Login extends React.Component{
     }).then((res) => {
       if(res.code === 200) {
         this.setState({
-          permissionLevel: res.permissionLevel,
+          userId: res.userId,
+          level: res.level,
           version: res.version
         })
         this.props.dispatch(UserStore.action.save({
+          userId: this.state.userId,
           username: this.state.username,
-          permissionLevel: this.state.permissionLevel,
+          level: this.state.level,
           version: this.state.version
         }))
         window.location.href = process.env.REACT_APP_FRONTEND_URL

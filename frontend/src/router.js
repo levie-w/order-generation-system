@@ -23,7 +23,7 @@ class IRouter extends React.Component {
                                 <Switch>
                                     <Route path="/order" component={Order}/>
                                     <Route path="/client" component={Client}/>
-                                    {this.props.permissionLevel === 1 ? <Route path="/user" component={User}/>: undefined}
+                                    {this.props.level === 1 ? <Route path="/user" component={User}/>: undefined}
                                     {/* 全都不匹配，默认重定向到 */}
                                     <Redirect to="/order"/>
                                     {/*<Route component={NoMatch}/>*/}
@@ -40,7 +40,7 @@ class IRouter extends React.Component {
 const mapStateToProps = state => {
     return {
         username: state.userInfo.username,
-        permissionLevel: state.userInfo.permissionLevel
+        level: state.userInfo.level
     }
 }
 export default connect(mapStateToProps)(IRouter)

@@ -1,9 +1,12 @@
 package backend.controller;
 
+import backend.entity.dto.ClientRequestDto;
 import backend.entity.dto.ClientResponseDto;
+import backend.entity.dto.Validity;
 import backend.entity.excel.Client;
 import backend.entity.excel.ValidationResult;
 import backend.service.ClientService;
+import backend.service.UserService;
 import backend.util.ExcelUtils;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,10 +31,20 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/listAll")
     @ResponseBody
-    public ClientResponseDto listAllClients() {
+    public ClientResponseDto listAllClients(@RequestParam("userId") Long userId,
+                                            @RequestParam("version") Long version) {
         ClientResponseDto clientResponseDto = new ClientResponseDto();
+
+        Validity validity = userService.validateUser(userId, version);
+        if (!validity.isPassed()) {
+            clientResponseDto.setCode(501);
+            return clientResponseDto;
+        }
 
         List<backend.entity.Client> clients = clientService.getAllClients();
         if (CollectionUtils.isEmpty(clients)) {
@@ -47,10 +60,20 @@ public class ClientController {
 
     @PostMapping("/create")
     @ResponseBody
-    public ClientResponseDto createClient(@RequestBody backend.entity.Client client) {
+    public ClientResponseDto createClient(@RequestBody ClientRequestDto clientRequestDto) {
         ClientResponseDto clientResponseDto = new ClientResponseDto();
 
+        Validity validity = userService.validateUser(clientRequestDto.getUserId(), clientRequestDto.getVersion());
+        if (!validity.isPassed()) {
+            clientResponseDto.setCode(501);
+            return clientResponseDto;
+        }
+
         try {
+            backend.entity.Client client = new backend.entity.Client();
+            client.setClientCode(clientRequestDto.getClientCode());
+            client.setClientName(clientRequestDto.getClientName());
+            client.setClientType(clientRequestDto.getClientType());
             clientService.saveClient(client);
             clientResponseDto.setCode(200);
         } catch (Exception e) {
@@ -63,10 +86,21 @@ public class ClientController {
 
     @PostMapping("/edit")
     @ResponseBody
-    public ClientResponseDto updateClient(@RequestBody backend.entity.Client client) {
+    public ClientResponseDto updateClient(@RequestBody ClientRequestDto clientRequestDto) {
         ClientResponseDto clientResponseDto = new ClientResponseDto();
 
+        Validity validity = userService.validateUser(clientRequestDto.getUserId(), clientRequestDto.getVersion());
+        if (!validity.isPassed()) {
+            clientResponseDto.setCode(501);
+            return clientResponseDto;
+        }
+
         try {
+            backend.entity.Client client = new backend.entity.Client();
+            client.setClientId(clientRequestDto.getClientId());
+            client.setClientCode(clientRequestDto.getClientCode());
+            client.setClientName(clientRequestDto.getClientName());
+            client.setClientType(clientRequestDto.getClientType());
             clientService.saveClient(client);
             clientResponseDto.setCode(200);
         } catch (Exception e) {
@@ -79,10 +113,19 @@ public class ClientController {
 
     @GetMapping("/delete")
     @ResponseBody
-    public ClientResponseDto deleteClient(@RequestParam("clientId") Long clientId) {
+    public ClientResponseDto deleteClient(@RequestParam("clientId") Long clientId,
+                                          @RequestParam("userId") Long userId,
+                                          @RequestParam("version") Long version) {
+        ClientResponseDto clientResponseDto = new ClientResponseDto();
+
+        Validity validity = userService.validateUser(userId, version);
+        if (!validity.isPassed()) {
+            clientResponseDto.setCode(501);
+            return clientResponseDto;
+        }
+
         clientService.deleteClient(clientId);
 
-        ClientResponseDto clientResponseDto = new ClientResponseDto();
         clientResponseDto.setCode(200);
 
         return clientResponseDto;
@@ -91,8 +134,16 @@ public class ClientController {
     @PostMapping("/batchCreate")
     @ResponseBody
     public ClientResponseDto createClients(@RequestParam("file") MultipartFile clientsFile,
-                                           @RequestParam("override") Boolean override) {
+                                           @RequestParam("override") Boolean override,
+                                           @RequestParam("userId") Long userId,
+                                           @RequestParam("version") Long version) {
         ClientResponseDto clientResponseDto = new ClientResponseDto();
+
+        Validity validity = userService.validateUser(userId, version);
+        if (!validity.isPassed()) {
+            clientResponseDto.setCode(501);
+            return clientResponseDto;
+        }
 
         if (clientsFile == null
                 || StringUtils.isEmpty(clientsFile.getOriginalFilename())

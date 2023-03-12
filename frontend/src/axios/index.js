@@ -42,15 +42,8 @@ export default class Axios {
           loading.style.display = 'none'
         }
         if (response.status === 200) {
-          let res = response.data
-          if (res.code === 200) {
-            resolve(res)
-          } else {
-            Modal.info({
-              title: '提示',
-              content: res.message
-            })
-          }
+          resolve(response.data)
+        } else {
           reject(response.data)
         }
       })

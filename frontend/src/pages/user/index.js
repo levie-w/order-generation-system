@@ -4,12 +4,15 @@ import axios from './../../axios/index'
 import Utils from './../../utils/utils'
 import ETable from './../../components/ETable'
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import {connect} from "react-redux";
+import UserStore from "../../redux/store/UserStore";
+
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 const TextArea = Input.TextArea
 const Option = Select.Option
 
-export default class User extends React.Component {
+class User extends React.Component {
 
   params = {
     page: 1,
@@ -23,26 +26,39 @@ export default class User extends React.Component {
     axios.ajax({
       url: '/user/listAll',
       data: {
-        params: undefined,
+        params: {
+          userId: this.props.userId,
+          version: this.props.version
+        },
         method: 'get'
       }
     }).then((data) => {
-      if (data && data.result) {
-        let list = data.result.map((item, index) => {
-          item.key = index
-          return item
-        })
-        this.setState({
-          list,
-          selectedRowKeys: null,
-          selectedItem: null,
-          pagination: Utils.pagination(data, (current) => {
-            this.params.page = current
-            this.setState({
-              selectedRowKeys: null,
-              selectedItem: null
+      if (data.code === 200) {
+        if (data.result) {
+          let list = data.result.map((item, index) => {
+            item.key = index
+            return item
+          })
+          this.setState({
+            list,
+            selectedRowKeys: null,
+            selectedItem: null,
+            pagination: Utils.pagination(data, (current) => {
+              this.params.page = current
+              this.setState({
+                selectedRowKeys: null,
+                selectedItem: null
+              })
             })
           })
+        }
+      } else if (data.code === 501) {
+        this.props.dispatch(UserStore.action.remove())
+        window.location.href = process.env.REACT_APP_FRONTEND_URL
+      } else {
+        Modal.info({
+          title: '提示',
+          content: data.message
         })
       }
     })
@@ -94,7 +110,9 @@ export default class User extends React.Component {
             url: '/user/delete',
             data: {
               params: {
-                userId: item.userId
+                userId: item.userId,
+                operatingUserId: _this.props.userId,
+                operatingVersion: _this.props.version
               },
               method: 'get'
             }
@@ -104,6 +122,14 @@ export default class User extends React.Component {
                 isVisible: false
               })
               _this.listAllUsers()
+            } else if (res.code === 501) {
+              _this.props.dispatch(UserStore.action.remove())
+              window.location.href = process.env.REACT_APP_FRONTEND_URL
+            } else {
+              Modal.info({
+                title: '提示',
+                content: res.message
+              })
             }
           })
         }
@@ -119,9 +145,9 @@ export default class User extends React.Component {
     let userId = data.userId;
     let username = data.username;
     let password = data.password;
-    let permissionLevel = data.permissionLevel;
+    let level = data.level;
 
-    if (username && password && permissionLevel > 0) {
+    if (username && password && level > 0) {
       axios.ajax({
         url: type === 'create' ? '/user/create' : '/user/edit',
         data: {
@@ -129,7 +155,9 @@ export default class User extends React.Component {
             userId: userId,
             username: username,
             password: password,
-            permissionLevel: permissionLevel
+            level: level,
+            operatingUserId: this.props.userId,
+            operatingVersion: this.props.version
           },
           method: 'post'
         }
@@ -142,6 +170,14 @@ export default class User extends React.Component {
             selectedItem: null
           })
           this.listAllUsers()
+        } else if (res.code === 501) {
+          this.props.dispatch(UserStore.action.remove())
+          window.location.href = process.env.REACT_APP_FRONTEND_URL
+        } else {
+          Modal.info({
+            title: '提示',
+            content: res.message
+          })
         }
       })
     } else {
@@ -167,7 +203,7 @@ export default class User extends React.Component {
       },
       {
         title: '权限等级',
-        dataIndex: 'permissionLevel'
+        dataIndex: 'level'
       }
     ]
 
@@ -213,6 +249,15 @@ export default class User extends React.Component {
     )
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    userId: state.userInfo.userId,
+    version: state.userInfo.version
+  }
+}
+export default connect(mapStateToProps)(User)
+
 
 class UserForm extends React.Component{
 
@@ -265,8 +310,8 @@ class UserForm extends React.Component{
 
           <FormItem label="权限等级" labelCol={{span: 5}} wrapperCol={{span: 17}}>
             {
-              getFieldDecorator('permissionLevel', type === 'edit' ? {
-                initialValue: userInfo.permissionLevel
+              getFieldDecorator('level', type === 'edit' ? {
+                initialValue: userInfo.level
               } : {
                 initialValue: undefined
               })(
@@ -294,7 +339,7 @@ class UserForm extends React.Component{
                 placement="rightTop"
                 trigger="hover">
               <div style={{display: "inline", float: "left", marginLeft: "10px", marginTop: "3px"}}>
-                <QuestionCircleOutlined style={{color: "#0066CC", fontSize: "17px"}}/>
+                <QuestionCircleOutlined style={{fontSize: "16px"}}/>
               </div>
             </Popover>
           </FormItem>

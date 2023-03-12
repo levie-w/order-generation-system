@@ -9,8 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 public class UserResponseDto {
+    private Long userId;
     private String username;
-    private Integer permissionLevel;
+    private Integer level;
     private Long version;
     private List<User> result;
     private int code;
