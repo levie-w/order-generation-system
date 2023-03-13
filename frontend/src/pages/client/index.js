@@ -178,7 +178,7 @@ class Client extends React.Component {
       let _this = this
       Modal.confirm({
         title: '确认删除',
-        content: '是否要删除当前选中数据',
+        content: '是否要删除当前选中数据?',
         onOk() {
           axios.ajax({
             url: '/client/delete',
@@ -337,7 +337,7 @@ class Client extends React.Component {
           }}
           width={600}
         >
-          <ClientForm type={this.state.type} clientInfo={this.state.clientInfo} wrappedComponentRef={(inst) => {this.clientForm = inst}}></ClientForm>
+          <ClientForm type={this.state.type} clientInfo={this.state.clientInfo} wrappedComponentRef={(inst) => {this.clientForm = inst}} />
         </Modal>
       </div>
     )
@@ -373,7 +373,7 @@ class ClientForm extends React.Component{
             } : {
               initialValue: undefined
             })(
-                <Input type="text" placeholder="请输入客户ID"></Input>
+                <Input type="text" placeholder="请输入客户ID" />
             )
           }
         </FormItem>
@@ -385,7 +385,7 @@ class ClientForm extends React.Component{
             } : {
               initialValue: undefined
             })(
-                <Input type="text" placeholder="请输入客户代码"></Input>
+                <Input type="text" placeholder="请输入客户代码" />
             )
           }
         </FormItem>
@@ -397,7 +397,7 @@ class ClientForm extends React.Component{
             } : {
               initialValue: undefined
             })(
-              <Input type="text" placeholder="请输入客户名称"></Input>
+              <Input type="text" placeholder="请输入客户名称" />
             )
           }
         </FormItem>

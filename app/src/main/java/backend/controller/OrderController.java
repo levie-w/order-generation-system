@@ -78,6 +78,11 @@ public class OrderController {
 
             for (int idx = 0; idx < orderConditionList.size(); idx++) {
                 OrderCondition orderCondition = (OrderCondition) orderConditionList.get(idx);
+
+                if (StringUtils.isEmpty(orderCondition.getProductName())) {
+                    continue;
+                }
+
                 ValidationResult validationResult = orderCondition.validate();
                 if (BooleanUtils.isFalse(validationResult.isPassed())) {
                     orderResponseDto.setCode(500);

@@ -39,15 +39,30 @@ public class OrderService {
             int totalGroups = (productQuantity - remainder) / 5;
 
             if (remainder > 0) {
-                int[] groupsForEach = AlgorithmUtils.splitInteger(totalGroups, clientQuantity - 1, false);
-                productQuantityGroups.add(remainder);
-                for (int each : groupsForEach) {
-                    productQuantityGroups.add(each * 5);
+                // 以5为单位切分出来的组还不够客户来分的情况
+                if (totalGroups < clientQuantity - 1) {
+                    int[] productQuantityForEach = AlgorithmUtils.splitInteger(productQuantity, clientQuantity, false);
+                    for (int each : productQuantityForEach) {
+                        productQuantityGroups.add(each);
+                    }
+                } else {
+                    int[] groupsForEach = AlgorithmUtils.splitInteger(totalGroups, clientQuantity - 1, false);
+                    productQuantityGroups.add(remainder);
+                    for (int each : groupsForEach) {
+                        productQuantityGroups.add(each * 5);
+                    }
                 }
             } else {
-                int[] groupsForEach = AlgorithmUtils.splitInteger(totalGroups, clientQuantity, false);
-                for (int each : groupsForEach) {
-                    productQuantityGroups.add(each * 5);
+                if (totalGroups < clientQuantity) {
+                    int[] productQuantityForEach = AlgorithmUtils.splitInteger(productQuantity, clientQuantity, false);
+                    for (int each : productQuantityForEach) {
+                        productQuantityGroups.add(each);
+                    }
+                } else {
+                    int[] groupsForEach = AlgorithmUtils.splitInteger(totalGroups, clientQuantity, false);
+                    for (int each : groupsForEach) {
+                        productQuantityGroups.add(each * 5);
+                    }
                 }
             }
         }

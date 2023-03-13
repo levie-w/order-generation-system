@@ -35,7 +35,7 @@ export default class Axios {
         baseURL: baseApi,
         method: options.data.method,
         params: (options.data && options.data.method === 'get' && options.data.params) || '',
-        data: (options.data && options.data.method === 'post' && options.data.params) || undefined,
+        data: (options.data && options.data.method === 'post' && options.data.params) || null,
       }).then((response) => {
         if (options.data && options.data.isShowLoading !== false) {
           loading = document.getElementById('ajaxLoading')

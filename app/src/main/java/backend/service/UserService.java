@@ -26,14 +26,13 @@ public class UserService {
     public AuthenticationResult authenticate(String username, String password) {
         AuthenticationResult result = new AuthenticationResult();
 
-        List<User> users = userRepository.findByName(username);
-        if (CollectionUtils.isEmpty(users)) {
+        User user = this.findUserByName(username);
+        if (user == null) {
             result.setCode(500);
             result.setReport("用户不存在！");
             return result;
         }
 
-        User user = users.get(0);
         if (!user.getPassword().equals(password)) {
             result.setCode(500);
             result.setReport("密码不正确！");
@@ -57,16 +56,28 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public User findUserByName(String username) {
+        List<User> users = userRepository.findByName(username);
+        if (CollectionUtils.isNotEmpty(users)) {
+            return users.get(0);
+        }
+        return null;
+    }
+
+    public User findUserById(Long userId) {
+        Optional<User> result = userRepository.findById(userId);
+        return result.orElse(null);
+    }
+
     public Validity validateUser(Long userId, Long version) {
         Validity validity = new Validity();
 
-        Optional<User> result = userRepository.findById(userId);
-        if (!result.isPresent()) {
+        User user = this.findUserById(userId);
+        if (user == null) {
             validity.setPassed(false);
             return validity;
         }
 
-        User user = result.get();
         if (!user.getVersion().equals(version)) {
             validity.setPassed(false);
             return validity;

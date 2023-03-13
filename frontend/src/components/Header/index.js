@@ -1,8 +1,9 @@
 import React from 'react'
-import { Row, Col, Button } from 'antd'
+import {Row, Col, Button, Modal} from 'antd'
 import './index.less'
 import { connect } from 'react-redux'
-import UserStore from "../../redux/store/UserStore";
+import UserStore from "../../redux/store/UserStore"
+import axios from "../../axios"
 
 class Header extends React.Component{
 
@@ -16,10 +17,17 @@ class Header extends React.Component{
           <Col span={24}>
             <span>欢迎, { this.props.username }</span>
             <Button style={{color: '#1890ff', marginLeft: 10, border: "none"}} onClick={ () => {
-              this.props.dispatch(UserStore.action.remove())
-              window.location.href = process.env.REACT_APP_FRONTEND_URL
+              let _this = this
+              Modal.confirm({
+                title: '确认退出',
+                content: '是否要退出当前用户?',
+                onOk() {
+                  _this.props.dispatch(UserStore.action.remove())
+                  window.location.href = process.env.REACT_APP_FRONTEND_URL
+                }
+              })
             }
-            }>登出</Button>
+            }>退出</Button>
           </Col>
         </Row>
 

@@ -1,18 +1,19 @@
 import React from 'react'
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import './index.less'
 import axios from "../../axios";
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import UserStore from "../../redux/store/UserStore";
-import {Modal} from "antd";
+import { Modal, Input } from "antd";
 
 class Login extends React.Component{
   state = {
-    userId: undefined,
-    username: undefined,
-    password: undefined,
-    level: undefined,
-    version: undefined
+    userId: null,
+    username: null,
+    password: null,
+    level: null,
+    version: null
   }
 
   login = () => {
@@ -69,13 +70,13 @@ class Login extends React.Component{
             </div>
             <ul>
               <li>
-                <input type="text" name="username" placeholder="请输入用户名" onChange={ event => this.setState({ username: event.target.value}) } />
+                <Input type="text" name="username" placeholder="请输入用户名" onChange={ event => this.setState({ username: event.target.value}) } />
               </li>
               <li>
-                <input type="password" name="password" placeholder="请输入密码" onChange={ event => this.setState({ password: event.target.value}) } />
+                <Input.Password name="password" placeholder="请输入密码" iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} onChange={ event => this.setState({ password: event.target.value}) }/>
               </li>
               <li>
-                <button onClick={ this.login.bind(this) }>登陆</button>
+                <button onClick={ this.login.bind(this) }>登录</button>
               </li>
             </ul>
           </dd>

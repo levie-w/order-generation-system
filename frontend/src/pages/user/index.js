@@ -104,7 +104,7 @@ class User extends React.Component {
       let _this = this
       Modal.confirm({
         title: '确认删除',
-        content: '是否要删除当前选中数据',
+        content: '是否要删除当前选中数据?',
         onOk() {
           axios.ajax({
             url: '/user/delete',
@@ -148,6 +148,14 @@ class User extends React.Component {
     let level = data.level;
 
     if (username && password && level > 0) {
+      if (/.*[\u4e00-\u9fa5]+.*$/.test(password)) {
+        return Modal.warn({
+          title: '提示',
+          content: <span>密码不能包含中文字符！</span>,
+          okText: 'ok',
+        });
+      }
+
       axios.ajax({
         url: type === 'create' ? '/user/create' : '/user/edit',
         data: {
@@ -173,6 +181,11 @@ class User extends React.Component {
         } else if (res.code === 501) {
           this.props.dispatch(UserStore.action.remove())
           window.location.href = process.env.REACT_APP_FRONTEND_URL
+        } else if (res.code === 502) {
+          Modal.info({
+            title: '提示',
+            content: res.message
+          })
         } else {
           Modal.info({
             title: '提示',
@@ -243,7 +256,7 @@ class User extends React.Component {
               }}
               width={600}
           >
-            <UserForm type={this.state.type} userInfo={this.state.userInfo} wrappedComponentRef={(inst) => {this.userForm = inst}}></UserForm>
+            <UserForm type={this.state.type} userInfo={this.state.userInfo} wrappedComponentRef={(inst) => {this.userForm = inst}} />
           </Modal>
         </div>
     )
@@ -279,7 +292,7 @@ class UserForm extends React.Component{
               } : {
                 initialValue: undefined
               })(
-                  <Input type="text" placeholder="请输入用户ID"></Input>
+                  <Input type="text" placeholder="请输入用户ID" />
               )
             }
           </FormItem>
@@ -291,7 +304,7 @@ class UserForm extends React.Component{
               } : {
                 initialValue: undefined
               })(
-                  <Input type="text" placeholder="请输入用户名"></Input>
+                  <Input type="text" placeholder="请输入用户名" maxlength="20" />
               )
             }
           </FormItem>
@@ -303,7 +316,7 @@ class UserForm extends React.Component{
               } : {
                 initialValue: undefined
               })(
-                  <Input type="text" placeholder="请输入密码"></Input>
+                  <Input type="text" placeholder="请输入密码 (不含中文字符)" maxlength="20" />
               )
             }
           </FormItem>

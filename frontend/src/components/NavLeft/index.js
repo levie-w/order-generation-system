@@ -26,6 +26,9 @@ class NavLeft extends React.Component{
     let menu = MenuConfig
     if (this.props.level !== 1) {
       menu = MenuConfig.filter(item => item.key !== '/user')
+      if (this.props.level !== 2) {
+        menu = menu.filter(item => item.key !== '/client')
+      }
     }
 
     const menuTreeNode =  this.renderMenu(menu)

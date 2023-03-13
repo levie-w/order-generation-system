@@ -8,6 +8,7 @@ import backend.entity.dto.Validity;
 import backend.service.UserService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +52,7 @@ public class UserController {
 
     @PostMapping("/create")
     @ResponseBody
+    @Transactional
     public UserResponseDto createUser(@RequestBody UserRequestDto userRequestDto) {
         UserResponseDto userResponseDto = new UserResponseDto();
 
@@ -61,6 +63,12 @@ public class UserController {
         }
 
         try {
+            if (userService.findUserByName(userRequestDto.getUsername()) != null) {
+                userResponseDto.setCode(502);
+                userResponseDto.setMessage("用户名已存在！");
+                return userResponseDto;
+            }
+
             User user = new User();
             user.setUsername(userRequestDto.getUsername());
             user.setPassword(userRequestDto.getPassword());
@@ -82,6 +90,7 @@ public class UserController {
 
     @PostMapping("/edit")
     @ResponseBody
+    @Transactional
     public UserResponseDto updateUser(@RequestBody UserRequestDto userRequestDto) {
         UserResponseDto userResponseDto = new UserResponseDto();
 
@@ -92,8 +101,15 @@ public class UserController {
         }
 
         try {
-            User user = new User();
-            user.setUserId(userRequestDto.getUserId());
+            User user = userService.findUserById(userRequestDto.getUserId());
+            if (!user.getUsername().equals(userRequestDto.getUsername())) {
+                if (userService.findUserByName(userRequestDto.getUsername()) != null) {
+                    userResponseDto.setCode(502);
+                    userResponseDto.setMessage("用户名已存在！");
+                    return userResponseDto;
+                }
+            }
+
             user.setUsername(userRequestDto.getUsername());
             user.setPassword(userRequestDto.getPassword());
             user.setLevel(userRequestDto.getLevel());

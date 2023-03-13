@@ -9,10 +9,10 @@ const UserStore = {
 
     // 2-2、定义存储的数据结构（可选）
     defaultUserInfo: {
-        userId: undefined,
-        username: undefined,
-        level: undefined,
-        version: undefined
+        userId: null,
+        username: null,
+        level: null,
+        version: null
     },
 
     // 2-3、定义动作及其内容

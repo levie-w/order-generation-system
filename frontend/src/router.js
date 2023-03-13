@@ -22,8 +22,8 @@ class IRouter extends React.Component {
                             <Admin>
                                 <Switch>
                                     <Route path="/order" component={Order}/>
-                                    <Route path="/client" component={Client}/>
-                                    {this.props.level === 1 ? <Route path="/user" component={User}/>: undefined}
+                                    { this.props.level <= 2  ? <Route path="/client" component={Client}/> : undefined }
+                                    { this.props.level === 1 ? <Route path="/user" component={User}/> : undefined }
                                     {/* 全都不匹配，默认重定向到 */}
                                     <Redirect to="/order"/>
                                     {/*<Route component={NoMatch}/>*/}
