@@ -19,7 +19,7 @@ export default class Axios {
 
   // 封装方法
   static ajax(options) {
-    // 超过三天没有后端请求的话，就强制重新登录
+    // 超过三天没有刷新操作或者后端请求的话，就强制重新登录 (此处为后端请求)
     const oldTimestamp = localStorage.getItem("timestamp")
     const newTimestamp = Date.now()
     if (oldTimestamp) {
