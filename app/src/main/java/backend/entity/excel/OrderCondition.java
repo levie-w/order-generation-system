@@ -21,8 +21,8 @@ public class OrderCondition {
     @ExcelColumn(name = "有效期", seq = 4)
     private String validityDate;
 
-    @ExcelColumn(name = "单价", seq = 5, type = ExcelColumn.ValueType.DOUBLE)
-    private Double price;
+    @ExcelColumn(name = "单价", seq = 5)
+    private String price;
 
     @ExcelColumn(name = "总流出量", seq = 6, type = ExcelColumn.ValueType.INTEGER)
     private Integer productQuantity;

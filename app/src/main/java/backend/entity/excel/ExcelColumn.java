@@ -7,6 +7,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -72,7 +73,8 @@ public @interface ExcelColumn {
         },
 
         STRING {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+            final DecimalFormat decimalFormatter = new DecimalFormat("###################.###########");
 
             public String format(Cell cell) {
                 if (cell == null || Cell.CELL_TYPE_BLANK == cell.getCellType()) {
@@ -81,9 +83,9 @@ public @interface ExcelColumn {
                 if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     if (HSSFDateUtil.isCellDateFormatted(cell)) {
                         Date date = cell.getDateCellValue();
-                        return formatter.format(date);
+                        return dateFormatter.format(date);
                     }
-                    return String.valueOf(new Double(cell.getNumericCellValue()).longValue()).replaceAll("\\s+", " ");
+                    return decimalFormatter.format(cell.getNumericCellValue());
                 }
                 if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
                     return String.valueOf(cell.getBooleanCellValue());

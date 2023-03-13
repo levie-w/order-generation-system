@@ -11,7 +11,7 @@ public class Order {
     private String manufacturer;
     private String batchNumber;
     private String validityDate;
-    private Double price;
+    private String price;
     private String clientName;
     private Integer quantity;
     private String date;

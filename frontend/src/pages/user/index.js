@@ -104,7 +104,7 @@ class User extends React.Component {
       let _this = this
       Modal.confirm({
         title: '确认删除',
-        content: '是否要删除当前选中数据?',
+        content: '是否要删除当前选中的数据？',
         onOk() {
           axios.ajax({
             url: '/user/delete',
