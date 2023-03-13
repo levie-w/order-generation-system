@@ -7,7 +7,6 @@ import BaseForm from '../../BaseForm';
 import ExportJsonExcel from "js-export-excel";
 import moment from "moment";
 import {connect} from "react-redux";
-import UserStore from "../../redux/store/UserStore";
 
 class Order extends React.Component {
 
@@ -98,19 +97,19 @@ class Order extends React.Component {
             })
             this.setState({
               list,
-              selectedRowKeys: null,
-              selectedItem: null,
+              selectedRowKeys: undefined,
+              selectedItem: undefined,
               pagination: Utils.pagination(data, (current) => {
                 this.params.page = current
                 this.setState({
-                  selectedRowKeys: null,
-                  selectedItem: null
+                  selectedRowKeys: undefined,
+                  selectedItem: undefined
                 })
               })
             })
           }
         } else if (data.code === 501) {
-          this.props.dispatch(UserStore.action.remove())
+          localStorage.clear()
           window.location.href = process.env.REACT_APP_FRONTEND_URL
         } else {
           Modal.info({

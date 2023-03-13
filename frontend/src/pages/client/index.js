@@ -65,19 +65,19 @@ class Client extends React.Component {
             })
             this.setState({
               list,
-              selectedRowKeys: null,
-              selectedItem: null,
+              selectedRowKeys: undefined,
+              selectedItem: undefined,
               pagination: Utils.pagination(data, (current) => {
                 this.params.page = current
                 this.setState({
-                  selectedRowKeys: null,
-                  selectedItem: null
+                  selectedRowKeys: undefined,
+                  selectedItem: undefined
                 })
               })
             })
           }
         } else if (data.code === 501) {
-          this.props.dispatch(UserStore.action.remove())
+          localStorage.clear()
           window.location.href = process.env.REACT_APP_FRONTEND_URL
         } else {
           Modal.info({
@@ -115,19 +115,19 @@ class Client extends React.Component {
           })
           this.setState({
             list,
-            selectedRowKeys: null,
-            selectedItem: null,
+            selectedRowKeys: undefined,
+            selectedItem: undefined,
             pagination: Utils.pagination(data, (current) => {
               this.params.page = current
               this.setState({
-                selectedRowKeys: null,
-                selectedItem: null
+                selectedRowKeys: undefined,
+                selectedItem: undefined
               })
             })
           })
         }
       } else if (data.code === 501) {
-        this.props.dispatch(UserStore.action.remove())
+        localStorage.clear()
         window.location.href = process.env.REACT_APP_FRONTEND_URL
       } else {
         Modal.info({
@@ -144,8 +144,8 @@ class Client extends React.Component {
     if (type === 'list') {
       this.listAllClients()
       this.setState({
-        selectedRowKeys: null,
-        selectedItem: null
+        selectedRowKeys: undefined,
+        selectedItem: undefined
       })
     } else if (type === 'create') {
       this.setState({
@@ -197,7 +197,7 @@ class Client extends React.Component {
               })
               _this.listAllClients()
             } else if (res.code === 501) {
-              _this.props.dispatch(UserStore.action.remove())
+              localStorage.clear()
               window.location.href = process.env.REACT_APP_FRONTEND_URL
             } else {
               Modal.info({
@@ -240,12 +240,12 @@ class Client extends React.Component {
           this.clientForm.props.form.resetFields() // 重置表单
           this.setState({
             isVisible: false,
-            selectedRowKeys: null,
-            selectedItem: null
+            selectedRowKeys: undefined,
+            selectedItem: undefined
           })
           this.listAllClients()
         } else if (res.code === 501) {
-          this.props.dispatch(UserStore.action.remove())
+          localStorage.clear()
           window.location.href = process.env.REACT_APP_FRONTEND_URL
         } else {
           Modal.info({

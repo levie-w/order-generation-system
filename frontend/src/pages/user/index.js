@@ -1,15 +1,12 @@
 import React from 'react'
-import { Card, Button, Modal, Radio, Popover, Select, Form, Input } from 'antd'
+import { Card, Button, Modal, Popover, Select, Form, Input } from 'antd'
 import axios from './../../axios/index'
 import Utils from './../../utils/utils'
 import ETable from './../../components/ETable'
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import {connect} from "react-redux";
-import UserStore from "../../redux/store/UserStore";
 
 const FormItem = Form.Item
-const RadioGroup = Radio.Group
-const TextArea = Input.TextArea
 const Option = Select.Option
 
 class User extends React.Component {
@@ -41,19 +38,19 @@ class User extends React.Component {
           })
           this.setState({
             list,
-            selectedRowKeys: null,
-            selectedItem: null,
+            selectedRowKeys: undefined,
+            selectedItem: undefined,
             pagination: Utils.pagination(data, (current) => {
               this.params.page = current
               this.setState({
-                selectedRowKeys: null,
-                selectedItem: null
+                selectedRowKeys: undefined,
+                selectedItem: undefined
               })
             })
           })
         }
       } else if (data.code === 501) {
-        this.props.dispatch(UserStore.action.remove())
+        localStorage.clear()
         window.location.href = process.env.REACT_APP_FRONTEND_URL
       } else {
         Modal.info({
@@ -70,8 +67,8 @@ class User extends React.Component {
     if (type === 'list') {
       this.listAllUsers()
       this.setState({
-        selectedRowKeys: null,
-        selectedItem: null
+        selectedRowKeys: undefined,
+        selectedItem: undefined
       })
     } else if (type === 'create') {
       this.setState({
@@ -123,7 +120,7 @@ class User extends React.Component {
               })
               _this.listAllUsers()
             } else if (res.code === 501) {
-              _this.props.dispatch(UserStore.action.remove())
+              localStorage.clear()
               window.location.href = process.env.REACT_APP_FRONTEND_URL
             } else {
               Modal.info({
@@ -174,12 +171,12 @@ class User extends React.Component {
           this.userForm.props.form.resetFields() // 重置表单
           this.setState({
             isVisible: false,
-            selectedRowKeys: null,
-            selectedItem: null
+            selectedRowKeys: undefined,
+            selectedItem: undefined
           })
           this.listAllUsers()
         } else if (res.code === 501) {
-          this.props.dispatch(UserStore.action.remove())
+          localStorage.clear()
           window.location.href = process.env.REACT_APP_FRONTEND_URL
         } else if (res.code === 502) {
           Modal.info({

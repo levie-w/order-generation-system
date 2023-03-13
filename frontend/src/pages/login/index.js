@@ -3,7 +3,6 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import './index.less'
 import axios from "../../axios";
 import {connect} from 'react-redux'
-import {push} from 'react-router-redux'
 import UserStore from "../../redux/store/UserStore";
 import { Modal, Input } from "antd";
 
