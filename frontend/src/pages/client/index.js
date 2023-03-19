@@ -271,7 +271,7 @@ class Client extends React.Component {
       {
         sheetData: [],  // excel文件中的数据源
         sheetName: '客户名单',  // excel文件中sheet页名称
-        sheetHeader: ['客户代码(必填)', '客户名称(必填)', '客户类型(必填)'],  // excel文件中每列的表头名称
+        sheetHeader: ['客户代码 (必填)', '客户名称 (必填)', '客户类型 (必填)'],  // excel文件中每列的表头名称
       }
     ]
     let file = new ExportJsonExcel(option);  // 生成excel文件

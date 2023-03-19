@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  app:
+    environment:
+      - JVM_MEMORY=-Xms512m -Xmx1024m
+      - SPRING_PROFILE=production
+    image: levie123/order-generation-system-app:20230318194217
+    ports:
+      - 8080:8080
+#    volumes:
+#      - /levie/logs/bootapp:/levie/logs/bootapp
+#      - /levie/logs/bootapp/gc:/levie/logs/bootapp/gc
+#    volumes_from:
+#      - container:secrets
+
+  nginx:
+    image: levie123/order-generation-system-nginx:20230318194217
+    links:
+      - app:app
+    ports:
+      - 80:80
+#    volumes:
+#      - /pang/logs/nginx:/pang/logs/nginx

@@ -135,7 +135,7 @@ class Order extends React.Component {
       {
         sheetData: [],  // excel文件中的数据源
         sheetName: '条件列表',  // excel文件中sheet页名称
-        sheetHeader: ['商品名称(必填)', '规格', '生产厂商', '批号', '有效期', '单价', '总流出量(必填, 例:100)', '总客户数(必填, 例:10)'],  // excel文件中每列的表头名称
+        sheetHeader: ['商品名称 (必填)', '规格', '生产厂商', '批号', '有效期', '单价', '总流出量 (必填, 例:100)', '总客户数 (必填, 例:10)'],  // excel文件中每列的表头名称
       }
     ]
     let file = new ExportJsonExcel(option);  // 生成excel文件

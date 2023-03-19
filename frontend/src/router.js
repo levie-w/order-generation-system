@@ -12,10 +12,10 @@ import { connect } from 'react-redux'
 class IRouter extends React.Component {
 
     updateTimestamp = () => {
-        // 超过三天没有刷新操作或者后端请求的话，就强制重新登录 (此处为刷新)
         const oldTimestamp = localStorage.getItem("timestamp")
         const newTimestamp = Date.now()
         if (oldTimestamp) {
+            // 超过三天没有刷新操作或者后端请求的话，就强制登出 (这里是刷新)
             if (newTimestamp - Number(oldTimestamp) > 3 * 24 * 60 * 60 * 1000) {
                 localStorage.clear()
                 window.location.href = process.env.REACT_APP_FRONTEND_URL
