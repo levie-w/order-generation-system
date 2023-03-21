@@ -4,6 +4,4 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 
-ENTRYPOINT ["nginx"]
-
-CMD ["-g","daemon off;"]
+CMD mkdir -p -m 755 /ogs/logs/nginx && nginx -g "daemon off;"

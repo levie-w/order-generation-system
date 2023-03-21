@@ -1,5 +1,6 @@
 package backend.controller.filter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.*;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 public class CorsFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -32,6 +34,7 @@ public class CorsFilter implements Filter {
             return;
         }
 
+        log.info(String.format("[Access] user: %s, method: %s, URI: %s", request.getRemoteUser(), request.getMethod(), request.getRequestURI()));
         chain.doFilter(request, response);
     }
 

@@ -6,6 +6,7 @@ import backend.entity.dto.UserRequestDto;
 import backend.entity.dto.UserResponseDto;
 import backend.entity.dto.Validity;
 import backend.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Levie Wang
  * @since 2023.03.10
  */
+@Slf4j
 @RequestMapping("/user")
 @RestController
 public class UserController {
@@ -47,6 +49,7 @@ public class UserController {
             userResponseDto.setMessage(e.getMessage());
         }
 
+        log.info(String.format("[Login] user: %s, state: %d, message: %s", userResponseDto.getUsername(), userResponseDto.getCode(), userResponseDto.getMessage()));
         return userResponseDto;
     }
 

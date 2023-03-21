@@ -9,8 +9,8 @@ services:
     ports:
       - 8080:8080
 #    volumes:
-#      - /levie/logs/bootapp:/levie/logs/bootapp
-#      - /levie/logs/bootapp/gc:/levie/logs/bootapp/gc
+#      - /ogs/logs/bootapp:/ogs/logs/bootapp
+#      - /ogs/logs/bootapp/gc:/ogs/logs/bootapp/gc
 #    volumes_from:
 #      - container:secrets
 
@@ -21,4 +21,4 @@ services:
     ports:
       - 80:80
 #    volumes:
-#      - /pang/logs/nginx:/pang/logs/nginx
+#      - /ogs/logs/nginx:/ogs/logs/nginx

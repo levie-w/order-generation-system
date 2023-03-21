@@ -1,13 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
+    <!-- 访问日志的文件输出 -->
+    <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/ogs/logs/bootapp/access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 输出文件路径+文件名 -->
+            <fileNamePattern>access.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 文件最大100mb -->
+            <maxFileSize>100mb</maxFileSize>
+            <!-- 日志总量不大于1gb -->
+            <totalSizeCap>1gb</totalSizeCap>
+            <!-- 日志保存7天 -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <!-- 输出日志记录格式 -->
+            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %class{36}.%method:%line - %msg%n</pattern>
         </encoder>
     </appender>
 
+    <!-- 普通日志的文件输出 -->
+    <appender name="COMMON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/ogs/logs/bootapp/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 输出文件路径+文件名 -->
+            <fileNamePattern>app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 文件最大100mb -->
+            <maxFileSize>100mb</maxFileSize>
+            <!-- 日志总量不大于1gb -->
+            <totalSizeCap>1gb</totalSizeCap>
+            <!-- 日志保存7天 -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <!-- 输出日志记录格式 -->
+            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %class{36}.%method:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 错误日志的文件输出 -->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/ogs/logs/bootapp/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 输出文件路径+文件名 -->
+            <fileNamePattern>error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 文件最大100mb -->
+            <maxFileSize>100mb</maxFileSize>
+            <!-- 日志总量不大于1gb -->
+            <totalSizeCap>1gb</totalSizeCap>
+            <!-- 日志保存7天 -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <!-- 输出日志记录格式 -->
+            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %class{36}.%method:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <!-- 输出日志记录格式 -->
+            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %class{36}.%method:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 设置日志输出级别以及形式 -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <!--<appender-ref ref="FILE" />-->
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="COMMON" />
     </root>
 
+    <logger name="backend.controller.filter.CorsFilter" level="INFO" additivity="false">
+        <appender-ref ref="ACCESS" />
+    </logger>
 </configuration>

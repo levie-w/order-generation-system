@@ -1,152 +1,77 @@
-<!--
-  ~ Copyright (c) 2017-2020 by Coupang. Some rights reserved.
-  ~ See the project homepage at: http://gitlab.coupang.net
-  ~ Licensed under the Coupang License;
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://coupang.net/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/pang/logs/${POD_NAME}/server/application.log</file>
-        <encoder>
-            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
-        </encoder>
+    <!-- 访问日志的文件输出 -->
+    <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/ogs/logs/bootapp/access.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>/pang/logs/${POD_NAME}/server/application.log.%d{yyyyMMdd}.%i</fileNamePattern>
+            <!-- 输出文件路径+文件名 -->
+            <fileNamePattern>access.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 文件最大100mb -->
             <maxFileSize>100mb</maxFileSize>
-            <maxHistory>5</maxHistory> <!-- Unit automatically changes according to date pattern in fileNamePattern -->
+            <!-- 日志总量不大于1gb -->
             <totalSizeCap>1gb</totalSizeCap>
+            <!-- 日志保存7天 -->
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
-    </appender>
-
-    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="FILE" />
-    </appender>
-
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
+        <encoder charset="UTF-8">
+            <!-- 输出日志记录格式 -->
+            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %class{36}.%method:%line - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="com.coupang" level="INFO" />
+    <!-- 普通日志的文件输出 -->
+    <appender name="COMMON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/ogs/logs/bootapp/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 输出文件路径+文件名 -->
+            <fileNamePattern>app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 文件最大100mb -->
+            <maxFileSize>100mb</maxFileSize>
+            <!-- 日志总量不大于1gb -->
+            <totalSizeCap>1gb</totalSizeCap>
+            <!-- 日志保存7天 -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <!-- 输出日志记录格式 -->
+            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %class{36}.%method:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
 
+    <!-- 错误日志的文件输出 -->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/ogs/logs/bootapp/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 输出文件路径+文件名 -->
+            <fileNamePattern>error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 文件最大100mb -->
+            <maxFileSize>100mb</maxFileSize>
+            <!-- 日志总量不大于1gb -->
+            <totalSizeCap>1gb</totalSizeCap>
+            <!-- 日志保存7天 -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <!-- 输出日志记录格式 -->
+            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %class{36}.%method:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <!-- 输出日志记录格式 -->
+            <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %class{36}.%method:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 设置日志输出级别以及形式 -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="COMMON" />
     </root>
 
-    <logger name="com.coupang.catalog.demeter.kafka.logger.LeadTimeLogger" level="DEBUG" additivity="false">
-        <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/pang/logs/${POD_NAME}/processor/lead_time.log</file>
-            <encoder>
-                <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/pang/logs/${POD_NAME}/processor/lead_time.log.%d{yyyyMMdd}.%i</fileNamePattern>
-                <maxFileSize>100mb</maxFileSize>
-                <maxHistory>5</maxHistory>
-                <totalSizeCap>1gb</totalSizeCap>
-            </rollingPolicy>
-        </appender>
-    </logger>
-
-    <logger name="com.coupang.catalog.demeter.kafka.logger.EventProcessorTaskLogger" level="DEBUG" additivity="false">
-        <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/pang/logs/${POD_NAME}/processor/clear.log</file>
-            <encoder>
-                <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/pang/logs/${POD_NAME}/processor/clear.log.%d{yyyyMMdd}.%i</fileNamePattern>
-                <maxFileSize>100mb</maxFileSize>
-                <maxHistory>5</maxHistory>
-                <totalSizeCap>1gb</totalSizeCap>
-            </rollingPolicy>
-        </appender>
-    </logger>
-
-    <logger name="com.coupang.catalog.demeter.kafka.logger.ProductMetaUpdatedLogger" level="DEBUG" additivity="false">
-        <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/pang/logs/${POD_NAME}/consumer/product_meta_updated.log</file>
-            <encoder>
-                <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/pang/logs/${POD_NAME}/consumer/product_meta_updated.log.%d{yyyyMMdd}.%i</fileNamePattern>
-                <maxFileSize>100mb</maxFileSize>
-                <maxHistory>5</maxHistory>
-                <totalSizeCap>1gb</totalSizeCap>
-            </rollingPolicy>
-        </appender>
-    </logger>
-
-    <logger name="com.coupang.catalog.demeter.kafka.logger.ReconciledItemUpdatedLogger" level="DEBUG" additivity="false">
-        <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/pang/logs/${POD_NAME}/consumer/reconciled_item_updated.log</file>
-            <encoder>
-                <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/pang/logs/${POD_NAME}/consumer/reconciled_item_updated.%d{yyyyMMdd}.%i</fileNamePattern>
-                <maxFileSize>100mb</maxFileSize>
-                <maxHistory>5</maxHistory>
-                <totalSizeCap>1gb</totalSizeCap>
-            </rollingPolicy>
-        </appender>
-    </logger>
-
-    <logger name="com.coupang.catalog.demeter.kafka.logger.CqiBrandUpdateLogger" level="DEBUG" additivity="false">
-        <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/pang/logs/${POD_NAME}/consumer/cqi_brand_update.log</file>
-            <encoder>
-                <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/pang/logs/${POD_NAME}/consumer/cqi_brand_update.log.%d{yyyyMMdd}.%i</fileNamePattern>
-                <maxFileSize>100mb</maxFileSize>
-                <maxHistory>5</maxHistory>
-                <totalSizeCap>1gb</totalSizeCap>
-            </rollingPolicy>
-        </appender>
-    </logger>
-
-    <logger name="com.coupang.catalog.demeter.kafka.logger.CqiBrandUpdateSuccessLogger" level="DEBUG" additivity="false">
-        <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/pang/logs/${POD_NAME}/producer/cqi_brand_update_success.log</file>
-            <encoder>
-                <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/pang/logs/${POD_NAME}/producer/cqi_brand_update_success.log.%d{yyyyMMdd}.%i</fileNamePattern>
-                <maxFileSize>100mb</maxFileSize>
-                <maxHistory>5</maxHistory>
-                <totalSizeCap>1gb</totalSizeCap>
-            </rollingPolicy>
-        </appender>
-    </logger>
-
-    <logger name="com.coupang.catalog.demeter.kafka.logger.CqiBrandUpdateErrorLogger" level="DEBUG" additivity="false">
-        <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/pang/logs/${POD_NAME}/producer/cqi_brand_update_error.log</file>
-            <encoder>
-                <pattern>%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/pang/logs/${POD_NAME}/producer/cqi_brand_update_error.log.%d{yyyyMMdd}.%i</fileNamePattern>
-                <maxFileSize>100mb</maxFileSize>
-                <maxHistory>5</maxHistory>
-                <totalSizeCap>1gb</totalSizeCap>
-            </rollingPolicy>
-        </appender>
+    <logger name="backend.controller.filter.CorsFilter" level="INFO" additivity="false">
+        <appender-ref ref="ACCESS" />
     </logger>
 </configuration>

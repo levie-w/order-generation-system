@@ -5,7 +5,7 @@ export JAVA_OPTS="$JAVA_OPTS \
                 -Dspring.profiles.active=${SPRING_PROFILE} \
                 ${JVM_MEMORY}"
 
-#APP_LOG_PATH=/levie/logs/bootapp
+#APP_LOG_PATH=/ogs/logs/bootapp
 #export JAVA_OPTS="$JAVA_OPTS \
 #                -server \
 #                -Dspring.profiles.active=${SPRING_PROFILE} \
