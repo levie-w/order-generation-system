@@ -99,7 +99,7 @@ public @interface ExcelColumn {
 
     int seq();
 
-    String name();
+    String name() default "";
 
     ValueType type() default ValueType.STRING;
 }

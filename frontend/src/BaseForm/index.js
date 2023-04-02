@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Select, Form, Button, Modal, Checkbox, DatePicker, Upload, Icon } from 'antd'
+import {Button, Checkbox, DatePicker, Form, Icon, Input, Modal, Select, Upload} from 'antd'
 import Utils from '../utils/utils'
 
 const FormItem = Form.Item
@@ -9,7 +9,8 @@ const FormItem = Form.Item
 class FilterForm extends React.Component {
 
   state = {
-    fileList: []
+    fileList: [],
+    fileList2: []
   }
 
   initFormList = () => {
@@ -97,8 +98,7 @@ class FilterForm extends React.Component {
                     onChange={e => {
                       if (e.file.status === 'done') {
                         if (e.file.response.code === 200) {
-                          let result = e.fileList;
-                          this.setState({ fileList: result });
+                          this.setState({ fileList: e.fileList });
                         } else {
                           Modal.warn({
                             title: '提示',
@@ -110,12 +110,48 @@ class FilterForm extends React.Component {
                       this.setState({ fileList: e.fileList });
                     }}
                     showUploadList = {true}
-                    fileList = {this.state.fileList}>
+                    fileList = {this.state.fileList}
+                >
                   <Button>
                     <Icon type="upload" /> {placeholder}
                   </Button>
                 </Upload>,
             )}
+          </FormItem>
+          formItemList.push(UPLOAD)
+        } else if (item.type === 'UPLOAD_2') { // 这里加一个UPLOAD_2是因为this.props.form.resetFields()无法清除Upload类型的文件列表，所以有多个upload类型的时候要有多个fileList变量来控制
+          const UPLOAD = <FormItem label= {label} key={field}>
+            {
+              getFieldDecorator([field])(
+                  <Upload
+                      headers = {{ 'content-type': 'multipart/form-data' }}
+                      multiple = {false}
+                      accept = '.xls,.xlsx'
+                      beforeUpload = {() => {
+                        return false;
+                      }}
+                      onChange={e => {
+                        if (e.file.status === 'done') {
+                          if (e.file.response.code === 200) {
+                            this.setState({ fileList2: e.fileList });
+                          } else {
+                            Modal.warn({
+                              title: '提示',
+                              content: <span>{e.file.response.msg}</span>,
+                              okText: 'ok',
+                            });
+                          }
+                        }
+                        this.setState({ fileList2: e.fileList });
+                      }}
+                      showUploadList = {true}
+                      fileList = {this.state.fileList2}
+                  >
+                    <Button>
+                      <Icon type="upload" /> {placeholder}
+                    </Button>
+                  </Upload>,
+              )}
           </FormItem>
           formItemList.push(UPLOAD)
         }
@@ -132,12 +168,12 @@ class FilterForm extends React.Component {
           <Button type="primary" style={{margin: '0 10px'}} onClick={() => {
             let params = this.props.form.getFieldsValue()
             this.props.handleSubmit(params)
-            this.setState({ fileList: [] })
+            this.setState({fileList: [], fileList2: []})
           }}>{this.props.submitButtonName}</Button>
 
           <Button type="primary" onClick={() => {
             this.props.form.resetFields()
-            this.setState({ fileList: [] })
+            this.setState({fileList: [], fileList2: []})
           }}>重置</Button>
         </FormItem>
       </Form>

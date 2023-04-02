@@ -3,6 +3,7 @@ import {HashRouter, BrowserRouter, Route, Switch, Redirect} from 'react-router-d
 import App from './App'
 import Admin from './admin'
 import Order from './pages/order/index'
+import CustomOrder from './pages/order/advanced/index'
 import Client from './pages/client/index'
 import Login from './pages/login/index'
 import User from './pages/user/index'
@@ -39,11 +40,12 @@ class IRouter extends React.Component {
                             this.props.username ?
                             <Admin>
                                 <Switch>
-                                    <Route path="/order" component={Order}/>
+                                    <Route path="/order/standard" component={Order}/>
+                                    <Route path="/order/advanced" component={CustomOrder}/>
                                     { this.props.level <= 2  ? <Route path="/client" component={Client}/> : undefined }
                                     { this.props.level === 1 ? <Route path="/user" component={User}/> : undefined }
                                     {/* 全都不匹配，默认重定向到 */}
-                                    <Redirect to="/order"/>
+                                    <Redirect to="/order/standard"/>
                                     {/*<Route component={NoMatch}/>*/}
                                 </Switch>
                             </Admin> : <Redirect to="/login"/>

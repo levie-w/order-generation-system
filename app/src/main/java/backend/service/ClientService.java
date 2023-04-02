@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Levie Wang
@@ -57,5 +59,25 @@ public class ClientService {
             return clientRepository.getRandomClients(num, clientTypes);
         }
         return clientRepository.getRandomClients(num);
+    }
+
+    public List<String> getRandomClientNames(int num, Map<String, String> clientNamesWithType, List<String> clientTypes) {
+        List<String> clientNames;
+        if (CollectionUtils.isNotEmpty(clientTypes)) {
+            clientNames = Lists.newArrayList();
+            for (Map.Entry<String, String> clientNameWithType : clientNamesWithType.entrySet()) {
+                if (clientTypes.contains(clientNameWithType.getValue())) {
+                    clientNames.add(clientNameWithType.getKey());
+                }
+            }
+        } else {
+            clientNames = Lists.newArrayList(clientNamesWithType.keySet());
+        }
+
+        Collections.shuffle(clientNames);
+        if (clientNames.size() <= num) {
+            return clientNames;
+        }
+        return clientNames.subList(0, num);
     }
 }

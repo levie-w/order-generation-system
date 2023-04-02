@@ -22,6 +22,6 @@ create table `clients` (
     `client_name` varchar(50) not null comment 'client name',
     `client_type` varchar(50) not null comment 'client type',
     `created_at` datetime(6) not null default current_timestamp(6) comment 'create timestamp',
-    `modified_at` datetime(6) not null default current_timestamp(6) comment 'update timesatmp',
+    `modified_at` datetime(6) not null default current_timestamp(6) comment 'update timestamp',
     primary key (`client_id`)
 );

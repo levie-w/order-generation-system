@@ -1,7 +1,17 @@
 const menuList = [
     {
       title: '流向生成',
-      key: '/order'
+      key: '/order',
+      children: [
+        {
+            title: '标准版',
+            key: '/order/standard',
+        },
+        {
+            title: '高级版',
+            key: '/order/advanced',
+        }
+      ]
     },
     {
         title: '客户管理',
